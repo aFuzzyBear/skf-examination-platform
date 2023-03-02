@@ -2,12 +2,12 @@ import { Reflector, KubeConfigRestClient, ClientProviderChain, KubectlRawRestCli
 import type { RestClient } from 'https://deno.land/x/kubernetes_client/mod.ts';
 import type { Service } from 'https://deno.land/x/kubernetes_apis/builtin/core@v1/structs.ts';
 import { CoreV1Api } from "https://deno.land/x/kubernetes_apis/builtin/core@v1/mod.ts";
-import { load as dotenv } from "https://deno.land/std/dotenv/mod.ts";
+import { load } from "https://deno.land/std@0.178.0/dotenv/mod.ts";
 
-const env = await dotenv();
+await load({export:true})
 
 function getEnv(name: string) { 
-  return env[name] ?? Deno.env.get(name);
+  return Deno.env.get(name);
 }
 console.log({ host: getEnv("KUBERNETES_HOST"), HOME: getEnv("HOME"), envlist: Deno.env.toObject() })
 
