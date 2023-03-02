@@ -34,16 +34,17 @@ import {
 import { load } from "https://deno.land/std@0.178.0/dotenv/mod.ts";
 
 import { config } from '@skf/shared/config.ts';
-
 // @deno-types="npm:@types/rascal"
 import rascal from 'rascal';
 const { createBrokerAsPromised } = rascal;
 
-await load({export: true});
-
+const env = await load({
+  export:true
+})
 function getEnv(name: string) { 
-  return Deno.env.get(name);
+  return env[name] ?? Deno.env.get(name);
 }
+
 console.log({ host: getEnv("KUBERNETES_HOST"), HOME: getEnv("HOME"), envlist: Deno.env.toObject() })
 
 export const DefaultClientProvider
@@ -51,7 +52,7 @@ export const DefaultClientProvider
     ['KubeConfig', () => KubeConfigRestClient.readKubeConfig(getEnv("KUBECONFIG"))], // 
     ['InCluster', () => KubeConfigRestClient.forInCluster()],
     ['KubectlProxy', () => KubeConfigRestClient.forKubectlProxy()],
-    ['KubectlRaw', async () => new KubectlRawRestClient()],
+    ['KubectlRaw', async () => await new KubectlRawRestClient()],
   ]);
 
 /**
@@ -271,6 +272,7 @@ export async function getServiceExposedIP(deployment: string, user_id: string) {
 }
 
 export async function portForward(deployment: string, user_id: string, ports: number) {
+  console.log()
   try {
     const response = coreApi.namespace(user_id);
     const podList = await response.getPodList();

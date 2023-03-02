@@ -8,11 +8,14 @@ import { ChannelStreams, KubeConfigRestClient } from "./via-kubeconfig.ts";
 
 import { merge } from 'https://deno.land/x/stream_observables@v1.3/combiners/merge.ts';
 
-await load({export:true})
+const env = await load({
+  export:true
+})
 
 function getEnv(name: string) { 
-  return Deno.env.get(name);
+  return env[name] ?? Deno.env.get(name);
 }
+
 console.log({ host: getEnv("KUBERNETES_HOST"), HOME: getEnv("HOME"), envlist: Deno.env.toObject() })
 
 export const DefaultClientProvider
@@ -20,7 +23,7 @@ export const DefaultClientProvider
     ['KubeConfig', () => KubeConfigRestClient.readKubeConfig(getEnv("KUBECONFIG"))], // 
     ['InCluster', () => KubeConfigRestClient.forInCluster()],
     ['KubectlProxy', () => KubeConfigRestClient.forKubectlProxy()],
-    ['KubectlRaw', async () => new KubectlRawRestClient()],
+    ['KubectlRaw', async () => await new KubectlRawRestClient()],
   ]);
   
 
