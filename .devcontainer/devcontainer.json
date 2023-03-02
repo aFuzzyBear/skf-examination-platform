@@ -12,7 +12,11 @@
 			"minikube": "none"
 		},
 		"ghcr.io/mpriscella/features/kind:1": {},
-		"ghcr.io/eitsupi/devcontainer-features/jq-likes:1": {}
+		"ghcr.io/eitsupi/devcontainer-features/jq-likes:1": {
+      "jqVersion": "none",
+      "yqVersion": "latest",
+      "gojqVersion": "none"
+    }
 	},
 	"customizations": {
 		"vscode": {
@@ -23,19 +27,22 @@
 				"ms-azuretools.vscode-docker",
 				"ms-kubernetes-tools.vscode-kubernetes-tools",
 				"redhat.vscode-yaml",
-				"yzhang.markdown-all-in-one"
+				"yzhang.markdown-all-in-one",
+				"Gruntfuggly.todo-tree",
+				"astro-build.astro-vscode",
+				"svelte.svelte-vscode"
 			]
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [3000],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "pnpm install"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
